@@ -1,7 +1,9 @@
 package com.viniciusbe.employeeservice.service.Impl;
 
 import com.viniciusbe.employeeservice.dto.EmployeeDto;
+import com.viniciusbe.employeeservice.dto.mapper.EmployeeDtoMapper;
 import com.viniciusbe.employeeservice.entity.Employee;
+import com.viniciusbe.employeeservice.entity.mapper.EmployeeMapper;
 import com.viniciusbe.employeeservice.repository.EmployeeRepository;
 import com.viniciusbe.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -15,21 +17,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
-        Employee employee = new Employee(
-                employeeDto.getId(),
-                employeeDto.getFirstName(),
-                employeeDto.getLastName(),
-                employeeDto.getEmail()
-        );
-
+        Employee employee = new EmployeeMapper().mapToModel(employeeDto);
         Employee savedEmployee = employeeRepository.save(employee);
 
-        EmployeeDto savedEmployeeDto = new EmployeeDto(
-                savedEmployee.getId(),
-                savedEmployee.getFirstName(),
-                savedEmployee.getLastName(),
-                savedEmployee.getEmail()
-        );
+        EmployeeDto savedEmployeeDto = new EmployeeDtoMapper().mapToModel(savedEmployee);
 
         return savedEmployeeDto;
     }
@@ -37,13 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto getEmployeeByID(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).get();
-
-        EmployeeDto employeeDto = new EmployeeDto(
-                employee.getId(),
-                employee.getFirstName(),
-                employee.getLastName(),
-                employee.getEmail()
-        );
+        EmployeeDto employeeDto = new EmployeeDtoMapper().mapToModel(employee);
 
         return employeeDto;
     }
