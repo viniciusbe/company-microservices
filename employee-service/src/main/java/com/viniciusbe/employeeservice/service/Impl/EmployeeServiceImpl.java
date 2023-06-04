@@ -1,9 +1,8 @@
 package com.viniciusbe.employeeservice.service.Impl;
 
 import com.viniciusbe.employeeservice.dto.EmployeeDto;
-import com.viniciusbe.employeeservice.dto.mapper.EmployeeDtoMapper;
 import com.viniciusbe.employeeservice.entity.Employee;
-import com.viniciusbe.employeeservice.entity.mapper.EmployeeMapper;
+import com.viniciusbe.employeeservice.mapper.EmployeeMapper;
 import com.viniciusbe.employeeservice.repository.EmployeeRepository;
 import com.viniciusbe.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -14,13 +13,14 @@ import org.springframework.stereotype.Service;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
+    private EmployeeMapper employeeMapper;
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
-        Employee employee = new EmployeeMapper().mapToModel(employeeDto);
+        Employee employee = employeeMapper.mapToEmployee(employeeDto);
         Employee savedEmployee = employeeRepository.save(employee);
 
-        EmployeeDto savedEmployeeDto = new EmployeeDtoMapper().mapToModel(savedEmployee);
+        EmployeeDto savedEmployeeDto = employeeMapper.mapToEmployeeDto(savedEmployee);
 
         return savedEmployeeDto;
     }
@@ -28,7 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public EmployeeDto getEmployeeByID(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).get();
-        EmployeeDto employeeDto = new EmployeeDtoMapper().mapToModel(employee);
+        EmployeeDto employeeDto = employeeMapper.mapToEmployeeDto(employee);
 
         return employeeDto;
     }
