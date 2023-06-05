@@ -2,6 +2,7 @@ package com.viniciusbe.departmentservice.service.impl;
 
 import com.viniciusbe.departmentservice.dto.DepartmentDto;
 import com.viniciusbe.departmentservice.entity.Department;
+import com.viniciusbe.departmentservice.exception.ResourceNotFoundException;
 import com.viniciusbe.departmentservice.mapper.DepartmentMapper;
 import com.viniciusbe.departmentservice.repository.DepartmentRepository;
 import com.viniciusbe.departmentservice.service.DepartmentService;
@@ -26,7 +27,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     public DepartmentDto getDepartmentByCode(String departmentCode) {
-        Department department = departmentRepository.findByDepartmentCode(departmentCode);
+        Department department = departmentRepository.findByDepartmentCode(departmentCode).orElseThrow(
+                () -> new ResourceNotFoundException("Department", "code", departmentCode)
+        );
 
         DepartmentDto departmentDto = departmentMapper.mapToDepartmentDto(department);
 
