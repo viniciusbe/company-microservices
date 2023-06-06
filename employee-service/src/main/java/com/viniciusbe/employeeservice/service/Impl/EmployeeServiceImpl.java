@@ -8,6 +8,7 @@ import com.viniciusbe.employeeservice.exception.EmailAlreadyExistsException;
 import com.viniciusbe.employeeservice.exception.ResourceNotFoundException;
 import com.viniciusbe.employeeservice.mapper.EmployeeMapper;
 import com.viniciusbe.employeeservice.repository.EmployeeRepository;
+import com.viniciusbe.employeeservice.service.APIClient;
 import com.viniciusbe.employeeservice.service.EmployeeService;
 import jdk.swing.interop.SwingInterOpUtils;
 import lombok.AllArgsConstructor;
@@ -24,8 +25,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
     private EmployeeMapper employeeMapper;
+
 //    private RestTemplate restTemplate;
-    private WebClient webClient;
+//    private WebClient webClient;
+    private APIClient apiClient;
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -51,15 +54,20 @@ public class EmployeeServiceImpl implements EmployeeService {
                 () -> new ResourceNotFoundException("Employee", "id", employeeId)
         );
 
+        //  ************* RestTemplate impl
 //        ResponseEntity<DepartmentDto> responseEntity = restTemplate.getForEntity("http://localhost:8080/api/departments/" + employee.getDepartmentCode(), DepartmentDto.class);
 //
 //        DepartmentDto departmentDto = responseEntity.getBody();
 
-        DepartmentDto departmentDto = webClient.get()
-                .uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode())
-                .retrieve()
-                .bodyToMono(DepartmentDto.class)
-                .block();
+        //  ************* WebClient impl
+//        DepartmentDto departmentDto = webClient.get()
+//                .uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode())
+//                .retrieve()
+//                .bodyToMono(DepartmentDto.class)
+//                .block();
+
+        // OpenFeign impl
+        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
 
         EmployeeDto employeeDto = employeeMapper.mapToEmployeeDto(employee);
 
