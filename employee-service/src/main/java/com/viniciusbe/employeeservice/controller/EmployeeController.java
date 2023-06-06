@@ -1,5 +1,6 @@
 package com.viniciusbe.employeeservice.controller;
 
+import com.viniciusbe.employeeservice.dto.APIResponseDto;
 import com.viniciusbe.employeeservice.dto.EmployeeDto;
 import com.viniciusbe.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
@@ -22,8 +23,8 @@ public class EmployeeController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<EmployeeDto> getEmployee(@PathVariable("id") Long employeeId) {
-        EmployeeDto employeeDto = employeeService.getEmployeeByID(employeeId);
-        return new ResponseEntity<>(employeeDto, HttpStatus.OK);
+    public ResponseEntity<APIResponseDto> getEmployee(@PathVariable("id") Long employeeId) {
+        APIResponseDto apiResponseDto = employeeService.getEmployeeByID(employeeId);
+        return new ResponseEntity<>(apiResponseDto, HttpStatus.OK);
     }
 }
