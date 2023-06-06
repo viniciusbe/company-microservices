@@ -1,15 +1,13 @@
 package com.viniciusbe.employeeservice.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString
 @Entity
 @Table(name = "employees")
 public class Employee {
@@ -21,4 +19,5 @@ public class Employee {
     private String lastName;
     @Column(nullable = false,unique = true)
     private String email;
+    private String departmentCode;
 }
