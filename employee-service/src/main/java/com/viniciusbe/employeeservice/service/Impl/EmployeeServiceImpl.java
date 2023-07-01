@@ -10,12 +10,9 @@ import com.viniciusbe.employeeservice.mapper.EmployeeMapper;
 import com.viniciusbe.employeeservice.repository.EmployeeRepository;
 import com.viniciusbe.employeeservice.service.APIClient;
 import com.viniciusbe.employeeservice.service.EmployeeService;
-import jdk.swing.interop.SwingInterOpUtils;
+import io.github.resilience4j.retry.annotation.Retry;
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.Optional;
 
@@ -48,6 +45,8 @@ public class EmployeeServiceImpl implements EmployeeService {
         return savedEmployeeDto;
     }
 
+//    @CircuitBreaker(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
+    @Retry(name = "${spring.application.name}", fallbackMethod = "getDefaultDepartment")
     @Override
     public APIResponseDto getEmployeeByID(Long employeeId) {
         Employee employee = employeeRepository.findById(employeeId).orElseThrow(
@@ -77,4 +76,24 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return apiResponseDto;
     }
+
+    public APIResponseDto getDefaultDepartment(Long employeeId, Exception expection) {
+        Employee employee = employeeRepository.findById(employeeId).orElseThrow(
+                () -> new ResourceNotFoundException("Employee", "id", employeeId)
+        );
+
+        DepartmentDto departmentDto = new DepartmentDto();
+        departmentDto.setDepartmentName("R&D department");
+        departmentDto.setDepartmentCode("RD001");
+        departmentDto.setDepartmentDescription("Research and Development Department");
+
+        EmployeeDto employeeDto = employeeMapper.mapToEmployeeDto(employee);
+
+        APIResponseDto apiResponseDto = new APIResponseDto();
+        apiResponseDto.setEmployee(employeeDto);
+        apiResponseDto.setDepartment(departmentDto);
+
+        return apiResponseDto;
+    }
+
 }
