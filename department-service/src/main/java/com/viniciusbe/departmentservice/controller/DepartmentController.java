@@ -1,23 +1,27 @@
 package com.viniciusbe.departmentservice.controller;
 
 import com.viniciusbe.departmentservice.dto.DepartmentDto;
-import com.viniciusbe.departmentservice.exception.ErrorDetails;
-import com.viniciusbe.departmentservice.exception.ResourceNotFoundException;
 import com.viniciusbe.departmentservice.service.DepartmentService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.context.request.WebRequest;
 
-import java.time.LocalDateTime;
-
+@Tag(
+        name = "Department Service",
+        description = "Department Controller exposes REST APIs"
+)
 @RestController
 @RequestMapping("api/departments")
 @AllArgsConstructor
 public class DepartmentController {
     private DepartmentService departmentService;
 
+    @Operation(summary = "Save Department REST API", description = "Is used to save department object in a database")
+    @ApiResponse(responseCode = "201", description = "HTTP Status 201 CREATED")
     @PostMapping
     public ResponseEntity<DepartmentDto> saveDepartment(@RequestBody DepartmentDto departmentDto) {
         DepartmentDto saveDepartment = departmentService.saveDepartment(departmentDto);
