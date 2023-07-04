@@ -3,12 +3,14 @@ package com.viniciusbe.employeeservice.service.Impl;
 import com.viniciusbe.employeeservice.dto.APIResponseDto;
 import com.viniciusbe.employeeservice.dto.DepartmentDto;
 import com.viniciusbe.employeeservice.dto.EmployeeDto;
+import com.viniciusbe.employeeservice.dto.OrganizationDto;
 import com.viniciusbe.employeeservice.entity.Employee;
 import com.viniciusbe.employeeservice.exception.EmailAlreadyExistsException;
 import com.viniciusbe.employeeservice.exception.ResourceNotFoundException;
 import com.viniciusbe.employeeservice.mapper.EmployeeMapper;
 import com.viniciusbe.employeeservice.repository.EmployeeRepository;
-import com.viniciusbe.employeeservice.service.APIClient;
+import com.viniciusbe.employeeservice.service.APIClientDep;
+import com.viniciusbe.employeeservice.service.APIClientOrg;
 import com.viniciusbe.employeeservice.service.EmployeeService;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.AllArgsConstructor;
@@ -25,7 +27,8 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 //    private RestTemplate restTemplate;
 //    private WebClient webClient;
-    private APIClient apiClient;
+    private APIClientDep apiClientDep;
+    private APIClientOrg apiClientOrg;
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -66,13 +69,15 @@ public class EmployeeServiceImpl implements EmployeeService {
 //                .block();
 
         // OpenFeign impl
-        DepartmentDto departmentDto = apiClient.getDepartment(employee.getDepartmentCode());
-
+        DepartmentDto departmentDto = apiClientDep.getDepartment(employee.getDepartmentCode());
+        OrganizationDto organizationDto = apiClientOrg.getOrganization(employee.getOrganizationCode());
         EmployeeDto employeeDto = employeeMapper.mapToEmployeeDto(employee);
+
 
         APIResponseDto apiResponseDto = new APIResponseDto();
         apiResponseDto.setEmployee(employeeDto);
         apiResponseDto.setDepartment(departmentDto);
+        apiResponseDto.setOrganization(organizationDto);
 
         return apiResponseDto;
     }
