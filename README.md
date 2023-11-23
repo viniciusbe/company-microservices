@@ -4,7 +4,7 @@ This document provides an overview of the architecture of a Spring Cloud applica
 
 ## Architecture Overview
 
-![Application Architecture](https://github.com/viniciusbe/springboot-microservices/tree/master/docs/architecture_diagram.jpg)
+![Application Architecture](https://raw.githubusercontent.com/viniciusbe/springboot-microservices/master/docs/architecture_diagram.jpg)
 
 The application is divided into various microservices, each responsible for a specific domain. The diagram above illustrates the high-level architecture.
 
