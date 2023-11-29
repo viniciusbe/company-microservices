@@ -1,6 +1,6 @@
-# Spring Cloud Application Architecture
+# A Company application build with microservices 
 
-This document provides an overview of the architecture of a Spring Cloud application. The system is composed of several components to ensure scalability, resilience, and modularity.
+This document provides an overview of the architecture of a Company application, implementing microservices through Spring Cloud. The system is composed of several components to ensure scalability, resilience, and modularity.
 
 ## Architecture Overview
 
